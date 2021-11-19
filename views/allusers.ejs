@@ -1,0 +1,21 @@
+<div>
+    <a href="/">Add User</a>
+</div>
+<hr>
+
+<% if(data!=null) { %>
+    <table>
+        <tr>
+            <th>First Name</th>
+            <th>Last Name </th>
+
+        </tr>
+        <% data.forEach(function(item){ %>
+            <tr>
+                <td><%= item.first_name%></td>
+                <td><%= item.last_name %></td>
+
+            </tr>
+        <% }) %>
+    </table>
+<% } %>

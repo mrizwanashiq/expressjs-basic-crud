@@ -1,0 +1,139 @@
+
+<h1>Add user</h1>
+<!-- Button trigger modal -->
+<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
+    Add
+</button>
+
+<form autocomplete="off" action="/user" method="post" enctype="application/x-www-form-urlencoded">
+    <input type="text" name="fname">
+    <input type="text" name="lname">
+    <input type="submit" >
+
+</form>
+
+
+
+<table  id="table_id" class="display">
+    <thead>
+    <tr>
+        <th>First Name</th>
+        <th>Last Name </th>
+        <th>Update</th>
+        <th>Delete</th>
+
+    </tr>
+    </thead>
+    <tbody>
+
+    </tbody>
+
+
+</table>
+
+
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form autocomplete="off" action="/user" method="post" enctype="application/x-www-form-urlencoded">
+                <div class="modal-body">
+
+                    <input type="text" id="fname1" name="fname" value="">
+                    <input type="text" id="lname1" name="lname" value="">
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Save changes</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModalEdit" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form action="/user/update" method="post" enctype="application/x-www-form-urlencoded">
+                <div class="modal-body">
+
+                    <input type="text" id="fname" name="fname" value="">
+                    <input type="text" id="lname" name="lname" value="">
+                    <input type="hidden" id="eid" name="id" value="">
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Save changes</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+<script>
+    $(document).ready( function () {
+        $('#table_id').DataTable({
+            "processing": true,
+            "serverSide": true,
+            ajax:{
+                type: "POST",
+                url:"/user/serverside",
+                data:function (data){
+                    columnsDef:["id","first_name","last_name"]
+                }
+            },
+            columns:[
+                {data:'first_name'},
+                {data:'last_name'},
+                {data:'update'},
+                {data:'delete'},
+            ],
+            columnDefs:[
+
+                {targets:2,
+                     render:function (data,type,row,meta){
+                    var rowData=encodeURIComponent(JSON.stringify(row));
+                        return `<button  onclick="editbtn('${rowData}')">Update</button>`
+                     }
+                },
+                {targets:3,
+                    render:function (data,type,row,meta){
+                        return `<button  onclick="editbtn('${row._id}')">Update</button>`
+                    }
+                }
+            ]
+        });
+    } );
+    function editbtn(id){
+        var data=JSON.parse(decodeURIComponent(id));
+        $("#fname").val(data.first_name)
+        $("#lname").val(data.last_name)
+        $("#eid").val(data._id)
+        $("#exampleModalEdit").modal("show");
+
+
+    }
+
+    // function addbtn(){
+    //     $("#exampleModal").modal("show");
+    // }
+
+</script>

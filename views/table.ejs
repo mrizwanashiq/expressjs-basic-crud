@@ -1,0 +1,125 @@
+
+<h1>Add user</h1>
+<!-- Button trigger modal -->
+<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
+    Add
+</button>
+
+<form autocomplete="off" action="/user" method="post" enctype="application/x-www-form-urlencoded">
+    <input type="text" name="fname">
+    <input type="text" name="lname">
+    <input type="submit" >
+
+</form>
+
+<table  id="table_id" class="display">
+    <thead>
+    <tr>
+        <th>First Name</th>
+        <th>Last Name </th>
+        <th>Update</th>
+        <th>Delete</th>
+        <th></th>
+    </tr>
+    </thead>
+    <tbody>
+    <% for(var i = 0; i < data.length ; i++) { %>
+        <tr>
+            <td><%= data[i].first_name%></td>
+            <td><%= data[i].last_name %></td>
+            <td><a class="btn btn-danger" href="#" onclick="editbtn('<%=data[i]._id%>')">Update</a></td>
+            <td><a class="btn btn-danger" href="/user/delete/<%=data[i]._id%>">Delete</a></td>
+
+        </tr>
+    <% } %>
+    </tbody>
+
+
+</table>
+
+
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form autocomplete="off" action="/user" method="post" enctype="application/x-www-form-urlencoded">
+                <div class="modal-body">
+
+                    <input type="text" id="fname" name="fname" value="">
+                    <input type="text" id="lname" name="lname" value="">
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Save changes</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModalEdit" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form action="/user/update" method="post" enctype="application/x-www-form-urlencoded">
+                <div class="modal-body">
+
+                    <input type="text" id="fname" name="fname" value="">
+                    <input type="text" id="lname" name="lname" value="">
+                    <input type="hidden" id="eid" name="id" value="">
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Save changes</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+<script>
+    $(document).ready( function () {
+        $('#table_id').DataTable();
+    } );
+    function editbtn(id){
+
+        $.ajax({
+            type:"GET",
+            url:"/user/ajax/"+id,
+
+            success:function (data){
+                $("#fname").val(data.first_name)
+                $("#lname").val(data.last_name)
+                $("#eid").val(data._id)
+                $("#exampleModalEdit").modal("show");
+            },
+            error:function (err){
+                alert(err);
+                var c=0;
+            }
+
+        })
+    }
+
+    function addbtn(){
+        $("#exampleModal").modal("show");
+    }
+
+</script>

@@ -1,0 +1,9 @@
+<h1>Add user</h1>
+<form autocomplete="off" action="/user/update" method="post" enctype="application/x-www-form-urlencoded">
+    <input type="hidden" name="_id" value="<%= data._id%>">
+    <input type="text" name="fname" value="<%= data.first_name%>">
+    <input type="text" name="lname" value="<%= data.last_name%>">
+    <input type="submit" >
+</form>
+
+
